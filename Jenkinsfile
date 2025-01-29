@@ -17,7 +17,7 @@ pipeline {
 
         stage('Restore NuGet Packages') {
             steps {
-                bat 'nuget restore %SOLUTION_FILE%'
+                bat '"C:\\NuGet\\nuget.exe" restore jenkins_publish_test.sln'
             }
         }
 
