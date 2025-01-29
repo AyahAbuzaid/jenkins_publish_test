@@ -3,9 +3,9 @@ pipeline {
 
     environment {
         SOLUTION_FILE = 'jenkins_publish_test.sln'  // Update with your solution file
-        PROJECT_FOLDER = 'YourWebApp'       // Update with your project folder
+        PROJECT_FOLDER = 'jenkins_publish_test'       // Update with your project folder
         BUILD_DIR = '$(Build.ArtifactStagingDirectory)'
-        DEPLOY_PATH = 'C:\\inetpub\\wwwroot\\MyWebApp'  // IIS Deployment Path
+        DEPLOY_PATH = 'C:\\inetpub\\wwwroot\\jenkins_publish_test'  // IIS Deployment Path
     }
 
     stages {
