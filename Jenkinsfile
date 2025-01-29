@@ -4,14 +4,14 @@ pipeline {
     environment {
         SOLUTION_FILE = 'jenkins_publish_test.sln'  // Update with your solution file
         PROJECT_FOLDER = 'jenkins_publish_test'       // Update with your project folder
-        BUILD_DIR = '$(Build.ArtifactStagingDirectory)'
+        BUILD_DIR = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\Maven Plugin Test Job\\publish'
         DEPLOY_PATH = 'C:\\inetpub\\wwwroot\\jenkins_publish_test'  // IIS Deployment Path
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/your/repo.git'
+                git branch: 'main', url: 'https://github.com/AyahAbuzaid/jenkins_publish_test.git'
             }
         }
 
