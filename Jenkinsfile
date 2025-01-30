@@ -27,12 +27,12 @@ pipeline {
             steps {
                 withEnv(["PATH=${MSBUILD_PATH};%PATH%"]) {
                     bat """
-                        "${CMD_PATH}" /c "${MSBUILD_PATH}\\MSBuild.exe" "%SOLUTION_FILE%" ^
-                        /p:Configuration=Release ^
-                        /p:Platform="Any CPU" ^
-                        /p:DeployOnBuild=true ^
-                        /p:WebPublishMethod=FileSystem ^
-                        /p:PublishUrl="${BUILD_DIR}"
+                         "C:\\Windows\\System32\\cmd.exe" /c "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe" "%SOLUTION_FILE%" ^
+                /p:Configuration=Release ^
+                /p:Platform="Any CPU" ^
+                /p:DeployOnBuild=true ^
+                /p:WebPublishMethod=FileSystem ^
+                /p:PublishUrl="${BUILD_DIR}"
                     """
                 }
             }
