@@ -19,7 +19,7 @@ pipeline {
         stage('Restore NuGet Packages') {
             steps {
                 echo "Restoring NuGet Packages"
-                bat '"C:\\Windows\\System32\\cmd.exe" /c "C:\\NuGet\\nuget.exe restore %SOLUTION_FILE%"'
+                bat "C:\\NuGet\\nuget.exe restore ${SOLUTION_FILE}"
             }
         }
 
@@ -29,7 +29,7 @@ pipeline {
                     echo "Building Solution"
                     bat """
                         echo "Using MSBuild from: ${MSBUILD_PATH}"
-                        call "C:\\Windows\\System32\\cmd.exe" /c "${MSBUILD_PATH}\\MSBuild.exe" "%SOLUTION_FILE%" ^ 
+                        "${MSBUILD_PATH}\\MSBuild.exe" "${SOLUTION_FILE}" ^ 
                         /p:Configuration=Release ^ 
                         /p:Platform="Any CPU" ^ 
                         /p:DeployOnBuild=true ^ 
@@ -45,8 +45,8 @@ pipeline {
                 script {
                     echo "Deploying to IIS"
                     bat """
-                        call "C:\\Windows\\System32\\cmd.exe" /c xcopy /E /Y /I "${BUILD_DIR}\\${PROJECT_FOLDER}" "${DEPLOY_PATH}"
-                        call "C:\\Windows\\System32\\cmd.exe" /c iisreset
+                        xcopy /E /Y /I "${BUILD_DIR}\\${PROJECT_FOLDER}" "${DEPLOY_PATH}"
+                        iisreset
                     """
                 }
             }
