@@ -2,11 +2,11 @@ pipeline {
     agent any
 
     environment {
-        SOLUTION_FILE = 'jenkins_publish_test.sln'  // Solution file name
-        PROJECT_FOLDER = 'jenkins_publish_test'     // Project folder
-        BUILD_DIR = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\Jenkins_test_publish_master\\publish'
-        DEPLOY_PATH = 'C:\\inetpub\\wwwroot\\jenkins_publish_test'  // IIS Deployment Path
-        MSBUILD_PATH = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\amd64'
+        SOLUTION_FILE = 'jenkins_publish_test.sln'
+        PROJECT_FOLDER = 'jenkins_publish_test'
+        BUILD_DIR = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\jenkins_publish_test\\publish'
+        DEPLOY_PATH = 'C:\\inetpub\\wwwroot\\jenkins_publish_test'
+        MSBUILD_PATH = 'C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin'
     }
 
     stages {
@@ -26,7 +26,7 @@ pipeline {
             steps {
                 withEnv(["PATH=${MSBUILD_PATH};%PATH%"]) {
                     bat """
-                        MSBuild.exe "%SOLUTION_FILE%" ^
+                        "%MSBUILD_PATH%\\MSBuild.exe" "%SOLUTION_FILE%" ^
                         /p:Configuration=Release ^
                         /p:Platform="Any CPU" ^
                         /p:DeployOnBuild=true ^
