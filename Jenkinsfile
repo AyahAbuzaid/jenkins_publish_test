@@ -20,7 +20,7 @@ pipeline {
 
         stage('Restore NuGet Packages') {
             steps {
-                bat "\"${CMD_PATH}\" /c \"${NUGET_PATH}\" restore \"${SOLUTION_FILE}\""
+                bat "\"${CMD_PATH}\" /c \"${NUGET_PATH} restore ${SOLUTION_FILE}\""
             }
         }
 
