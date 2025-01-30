@@ -2,10 +2,11 @@ pipeline {
     agent any
 
     environment {
-        SOLUTION_FILE = 'jenkins_publish_test.sln'  // Update with your solution file
-        PROJECT_FOLDER = 'jenkins_publish_test'       // Update with your project folder
+        SOLUTION_FILE = 'jenkins_publish_test.sln'  // Solution file name
+        PROJECT_FOLDER = 'jenkins_publish_test'     // Project folder
         BUILD_DIR = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\Jenkins_test_publish_master\\publish'
         DEPLOY_PATH = 'C:\\inetpub\\wwwroot\\jenkins_publish_test'  // IIS Deployment Path
+        MSBUILD_PATH = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\amd64'
     }
 
     stages {
@@ -17,24 +18,32 @@ pipeline {
 
         stage('Restore NuGet Packages') {
             steps {
-                bat '"C:\\NuGet\\nuget.exe" restore jenkins_publish_test.sln'
+                bat '"C:\\NuGet\\nuget.exe" restore "%SOLUTION_FILE%"'
             }
         }
 
         stage('Build Solution') {
             steps {
-                bat '"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\amd64\\MSBuild.exe" jenkins_publish_test.sln /p:Configuration=Release /p:Platform="Any CPU" /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:PublishUrl=C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\Maven Plugin Test Job\\publish'
+                withEnv(["PATH=${MSBUILD_PATH};%PATH%"]) {
+                    bat """
+                        MSBuild.exe "%SOLUTION_FILE%" ^
+                        /p:Configuration=Release ^
+                        /p:Platform="Any CPU" ^
+                        /p:DeployOnBuild=true ^
+                        /p:WebPublishMethod=FileSystem ^
+                        /p:PublishUrl="${BUILD_DIR}"
+                    """
+                }
             }
         }
 
         stage('Deploy to IIS') {
             steps {
                 script {
-                    def deployCmd = """
-                        xcopy "%BUILD_DIR%\\${PROJECT_FOLDER}" "%DEPLOY_PATH%" /E /Y /I
+                    bat """
+                        xcopy /E /Y /I "${BUILD_DIR}\\${PROJECT_FOLDER}" "${DEPLOY_PATH}"
                         iisreset
                     """
-                    bat deployCmd
                 }
             }
         }
