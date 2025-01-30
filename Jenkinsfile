@@ -8,6 +8,7 @@ pipeline {
         DEPLOY_PATH = 'C:\\inetpub\\wwwroot\\jenkins_publish_test'
         MSBUILD_PATH = 'C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin'
         CMD_PATH = 'C:\\Windows\\System32\\cmd.exe'
+        NUGET_PATH = 'C:\\NuGet\\nuget.exe' // Define NuGet path
     }
 
     stages {
@@ -19,7 +20,7 @@ pipeline {
 
         stage('Restore NuGet Packages') {
             steps {
-                bat '"C:\\Windows\\System32\\cmd.exe" /c "C:\\NuGet\\nuget.exe" restore "%SOLUTION_FILE%"'
+                bat "\"${NUGET_PATH}\" restore \"${SOLUTION_FILE}\""
             }
         }
 
