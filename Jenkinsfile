@@ -4,7 +4,7 @@ pipeline {
     environment {
         SOLUTION_FILE = 'jenkins_publish_test.sln'  // Update with your solution file
         PROJECT_FOLDER = 'jenkins_publish_test'       // Update with your project folder
-        BUILD_DIR = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\Maven Plugin Test Job\\publish'
+        BUILD_DIR = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\Jenkins_test_publish_master\\publish'
         DEPLOY_PATH = 'C:\\inetpub\\wwwroot\\jenkins_publish_test'  // IIS Deployment Path
     }
 
@@ -23,7 +23,7 @@ pipeline {
 
         stage('Build Solution') {
             steps {
-                bat '"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\MSBuild\\Current\\Bin\\MSBuild.exe" %SOLUTION_FILE% /p:Configuration=Release /p:Platform="Any CPU" /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:PublishUrl=%BUILD_DIR%'
+                bat '"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\amd64\\MSBuild.exe" jenkins_publish_test.sln /p:Configuration=Release /p:Platform="Any CPU" /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:PublishUrl=C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\Maven Plugin Test Job\\publish'
             }
         }
 
