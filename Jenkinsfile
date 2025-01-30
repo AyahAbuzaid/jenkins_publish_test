@@ -7,6 +7,7 @@ pipeline {
         BUILD_DIR = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\jenkins_publish_test\\publish'
         DEPLOY_PATH = 'C:\\inetpub\\wwwroot\\jenkins_publish_test'
         MSBUILD_PATH = 'C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin'
+        CMD_PATH = 'C:\\Windows\\System32\\cmd.exe'
     }
 
     stages {
@@ -18,7 +19,7 @@ pipeline {
 
         stage('Restore NuGet Packages') {
             steps {
-                bat '"C:\\NuGet\\nuget.exe" restore "%SOLUTION_FILE%"'
+                bat '"C:\\Windows\\System32\\cmd.exe" /c "C:\\NuGet\\nuget.exe" restore "%SOLUTION_FILE%"'
             }
         }
 
@@ -26,7 +27,7 @@ pipeline {
             steps {
                 withEnv(["PATH=${MSBUILD_PATH};%PATH%"]) {
                     bat """
-                        "%MSBUILD_PATH%\\MSBuild.exe" "%SOLUTION_FILE%" ^
+                        "${CMD_PATH}" /c "${MSBUILD_PATH}\\MSBuild.exe" "%SOLUTION_FILE%" ^
                         /p:Configuration=Release ^
                         /p:Platform="Any CPU" ^
                         /p:DeployOnBuild=true ^
@@ -41,8 +42,8 @@ pipeline {
             steps {
                 script {
                     bat """
-                        xcopy /E /Y /I "${BUILD_DIR}\\${PROJECT_FOLDER}" "${DEPLOY_PATH}"
-                        iisreset
+                        "${CMD_PATH}" /c xcopy /E /Y /I "${BUILD_DIR}\\${PROJECT_FOLDER}" "${DEPLOY_PATH}"
+                        "${CMD_PATH}" /c iisreset
                     """
                 }
             }
