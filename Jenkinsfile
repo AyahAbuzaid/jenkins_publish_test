@@ -7,7 +7,6 @@ pipeline {
         BUILD_DIR = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\jenkins_publish_test\\publish'
         DEPLOY_PATH = 'C:\\inetpub\\wwwroot\\jenkins_publish_test'
         MSBUILD_PATH = 'C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin'
-        CMD_PATH = 'C:\\Windows\\System32\\cmd.exe'
     }
 
     stages {
@@ -30,7 +29,7 @@ pipeline {
                     echo "Building Solution"
                     bat """
                         echo "Using MSBuild from: ${MSBUILD_PATH}"
-                        "${CMD_PATH}" /c "${MSBUILD_PATH}\\MSBuild.exe" "%SOLUTION_FILE%" ^ 
+                        call "C:\\Windows\\System32\\cmd.exe" /c "${MSBUILD_PATH}\\MSBuild.exe" "%SOLUTION_FILE%" ^ 
                         /p:Configuration=Release ^ 
                         /p:Platform="Any CPU" ^ 
                         /p:DeployOnBuild=true ^ 
@@ -46,8 +45,8 @@ pipeline {
                 script {
                     echo "Deploying to IIS"
                     bat """
-                        "${CMD_PATH}" /c xcopy /E /Y /I "${BUILD_DIR}\\${PROJECT_FOLDER}" "${DEPLOY_PATH}"
-                        "${CMD_PATH}" /c iisreset
+                        call "C:\\Windows\\System32\\cmd.exe" /c xcopy /E /Y /I "${BUILD_DIR}\\${PROJECT_FOLDER}" "${DEPLOY_PATH}"
+                        call "C:\\Windows\\System32\\cmd.exe" /c iisreset
                     """
                 }
             }
