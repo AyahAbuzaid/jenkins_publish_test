@@ -23,7 +23,19 @@ pipeline {
             }
         }
 
-       
+        stage('Publish') {
+            steps {
+                bat """
+                    "C:\\Program Files\\dotnet\\dotnet.exe" publish "${SOLUTION_FILE}" -c Release -o "${BUILD_DIR}\\${PROJECT_FOLDER}"
+                """
+            }
+        }
+
+        stage('Verify Published Files') {
+            steps {
+                bat 'dir "${BUILD_DIR}\\${PROJECT_FOLDER}"'
+            }
+        }
 
         stage('Deploy to IIS') {
             steps {
