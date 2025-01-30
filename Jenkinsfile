@@ -7,8 +7,8 @@ pipeline {
         BUILD_DIR = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\jenkins_publish_test\\publish'
         DEPLOY_PATH = 'C:\\inetpub\\wwwroot\\jenkins_publish_test'
         MSBUILD_PATH = 'C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin'
-        CMD_PATH = 'C:\\Windows\\System32\\cmd.exe'
-        NUGET_PATH = 'C:\\NuGet\\nuget.exe' // Define NuGet path
+        CMD_PATH = 'C:\\Windows\\System32\\cmd.exe' // Explicit cmd.exe path
+        NUGET_PATH = 'C:\\NuGet\\nuget.exe' // Define NuGet path explicitly
     }
 
     stages {
@@ -20,8 +20,7 @@ pipeline {
 
         stage('Restore NuGet Packages') {
             steps {
-            
-             bat "\"${NUGET_PATH}\" restore \"${SOLUTION_FILE}\""
+                bat "\"${NUGET_PATH}\" restore \"${SOLUTION_FILE}\""
             }
         }
 
@@ -29,12 +28,12 @@ pipeline {
             steps {
                 withEnv(["PATH=${MSBUILD_PATH};%PATH%"]) {
                     bat """
-                        "${CMD_PATH}" /c "${MSBUILD_PATH}\\MSBuild.exe" "%SOLUTION_FILE%" ^
+                        \"${CMD_PATH}\" /c \"${MSBUILD_PATH}\\MSBuild.exe\" \"%SOLUTION_FILE%\" ^
                         /p:Configuration=Release ^
-                        /p:Platform="Any CPU" ^
+                        /p:Platform=\"Any CPU\" ^
                         /p:DeployOnBuild=true ^
                         /p:WebPublishMethod=FileSystem ^
-                        /p:PublishUrl="${BUILD_DIR}"
+                        /p:PublishUrl=\"${BUILD_DIR}\"
                     """
                 }
             }
@@ -44,8 +43,8 @@ pipeline {
             steps {
                 script {
                     bat """
-                        "${CMD_PATH}" /c xcopy /E /Y /I "${BUILD_DIR}\\${PROJECT_FOLDER}" "${DEPLOY_PATH}"
-                        "${CMD_PATH}" /c iisreset
+                        \"${CMD_PATH}\" /c xcopy /E /Y /I \"${BUILD_DIR}\\${PROJECT_FOLDER}\" \"${DEPLOY_PATH}\"
+                        \"${CMD_PATH}\" /c iisreset
                     """
                 }
             }
