@@ -26,13 +26,14 @@ pipeline {
         stage('Build Solution') {
             steps {
                 withEnv(["PATH=${MSBUILD_PATH};%PATH%"]) {
-                    bat 
-                        '"${CMD_PATH}" /c "${MSBUILD_PATH}\\MSBuild.exe" "%SOLUTION_FILE%" ^
+                    bat "
+                        "${CMD_PATH}" /c "${MSBUILD_PATH}\\MSBuild.exe" "%SOLUTION_FILE%" ^
                         /p:Configuration=Release ^
                         /p:Platform="Any CPU" ^
                         /p:DeployOnBuild=true ^
                         /p:WebPublishMethod=FileSystem ^
-                        /p:PublishUrl="${BUILD_DIR}"'
+                        /p:PublishUrl="${BUILD_DIR}"
+                    "
                     
                 }
             }
