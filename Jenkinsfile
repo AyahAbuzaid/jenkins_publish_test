@@ -19,6 +19,7 @@ pipeline {
 
         stage('Restore NuGet Packages') {
             steps {
+                echo "Restoring NuGet Packages"
                 bat '"C:\\Windows\\System32\\cmd.exe" /c "C:\\NuGet\\nuget.exe restore %SOLUTION_FILE%"'
             }
         }
@@ -26,13 +27,15 @@ pipeline {
         stage('Build Solution') {
             steps {
                 withEnv(["PATH=${MSBUILD_PATH};%PATH%"]) {
+                    echo "Building Solution"
                     bat """
-                         "C:\\Windows\\System32\\cmd.exe" /c "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe" "%SOLUTION_FILE%" ^
-                /p:Configuration=Release ^
-                /p:Platform="Any CPU" ^
-                /p:DeployOnBuild=true ^
-                /p:WebPublishMethod=FileSystem ^
-                /p:PublishUrl="${BUILD_DIR}"
+                        echo "Using MSBuild from: ${MSBUILD_PATH}"
+                        "${CMD_PATH}" /c "${MSBUILD_PATH}\\MSBuild.exe" "%SOLUTION_FILE%" ^ 
+                        /p:Configuration=Release ^ 
+                        /p:Platform="Any CPU" ^ 
+                        /p:DeployOnBuild=true ^ 
+                        /p:WebPublishMethod=FileSystem ^ 
+                        /p:PublishUrl="${BUILD_DIR}"
                     """
                 }
             }
@@ -41,6 +44,7 @@ pipeline {
         stage('Deploy to IIS') {
             steps {
                 script {
+                    echo "Deploying to IIS"
                     bat """
                         "${CMD_PATH}" /c xcopy /E /Y /I "${BUILD_DIR}\\${PROJECT_FOLDER}" "${DEPLOY_PATH}"
                         "${CMD_PATH}" /c iisreset
