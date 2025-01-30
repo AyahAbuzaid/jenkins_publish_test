@@ -32,8 +32,9 @@ pipeline {
         }
 
         stage('Verify Published Files') {
-            steps {
-                bat 'dir "${BUILD_DIR}\\${PROJECT_FOLDER}"'
+            steps {                
+                bat 'dir "C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\jenkins_publish_test\\publish\\jenkins_publish_test"'
+
             }
         }
 
